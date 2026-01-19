@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: redis-validate
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: redis-test
+        image: lokeshghtc/redis-test:1.0   # replace if you used a different tag
+        env:
+        - name: REDIS_HOST
+          value: redis-service
+        - name: REDIS_PORT
+          value: "6379"
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: redis-secret
+              key: redis-password
+  backoffLimit: 0
